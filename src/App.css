@@ -36,3 +36,128 @@
     transform: rotate(360deg);
   }
 }
+
+
+.chat-wrapper{
+  display: flex;
+  width: 50%;
+  margin: 0 auto;
+  border: solid 1px #101010;
+  border-radius: 5px;
+  margin:50px;
+  text-align: center;
+}
+
+.chat-ul {
+list-style: none;
+padding: 0;
+margin: 10px 0px;
+width: 100%;
+li{
+    font-size: 20px;
+    padding: 10px 0px;
+    cursor: pointer;
+
+    border-bottom: solid 1px #101010;
+    /* &:hover {
+      background-color: #eee;
+    } */
+}
+.active{
+  background-color: #333;
+  color: #FFF;
+}
+}
+.chat-header{
+  width: 100%;
+  padding: 20px 0px;
+  border-bottom: solid 1px #eee;
+  margin-bottom: 10px;
+}
+.chat-right{
+  width: 100%;
+  position: relative;
+  height: 400px;
+  overflow-y: scroll;
+  padding-bottom: 110px;
+    .api-chat{
+        color: red;
+    }
+    .message-window{
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+    .messages-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+}
+}
+.chat-input {
+    position: absolute;
+    
+    bottom: 0;
+    text-align: center;
+    width: 100%;
+    padding-bottom: 15px;
+    .chat-inputbx{
+      padding: 5px;
+    }
+    .sendbtn{
+      padding: 5px;
+      width: 60px;
+      cursor: pointer;
+    }
+}
+.chat-left{
+  width: 30%;
+  border-right: solid 1px #4f4d4d;
+  padding-right: 10px;
+  padding: 10px 0px;
+  border-radius: 5px;
+}
+.sender-chat {
+  justify-items: right;
+}
+.usertxt {
+  background-color: #393838;
+  padding: 8px 12px;
+  border-radius: 12px;
+  margin: 5px;
+  align-self: flex-end;
+  color: #f1f0f0;
+  width: 70%;
+  justify-content:right;
+}
+
+.api-chat {
+  background-color: #f1f0f0;
+  padding: 8px 12px;
+  border-radius: 12px;
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.profile-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  margin-top: 5px;
+}
+.api-reply{
+  display: flex;
+  margin-bottom: 10px;
+  .user-reply-txt{
+    background-color: #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    width: 70%;
+  }
+}
+.user-indicator{
+  text-align: right;
+  font-size: 12px;
+}
