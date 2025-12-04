@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    messages: [],
+    messages: [{sender: 'api', text: "Hello! How can i help you today!"}],
 }
 
 const chat3Slice = createSlice ({
