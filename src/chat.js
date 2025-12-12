@@ -56,8 +56,8 @@ if(openChatTab== 'chat1'){
 
 const apiResponse = (messg) =>{
     return (
-        <div className='api-reply'>
-            <div className='profile-icon'>
+        <div className='api-reply  '>
+            <div className='profile-icon col-12'>
                 <img src='/profile-icon.png' alt='profile-icon' className='profile-icon'></img>
             </div>
             <div className='user-reply-txt'>
@@ -76,6 +76,16 @@ const userchat = (messg) =>{
         </div>
     )
 }
+
+function addChat () {
+    const list = document.getElementById("chatList");
+    const newItem = document.createElement("li");
+    const itemText = "Chat " + (list.children.length + 1);
+    newItem.textContent = itemText;
+    newItem.addEventListener("click", handleOpenChat);
+    list.appendChild(newItem)
+}
+
 const messagesEndRef = useRef(null); 
 useEffect(() => {
     if (messagesEndRef.current) {
@@ -83,12 +93,13 @@ useEffect(() => {
     }
   }, [openChatWindow]);
     return(
-        <div className='chat-wrapper'>
-            <div className='chat-left'>
-               <ul className='chat-ul'>
-            <li key= 'chatid1' id="chat1" className= "" onClick={(e)=> {handleOpenChat(e)}}>Chat 1</li>
-            <li key= 'chatid2' id="chat2" className= "" onClick={(e)=> {handleOpenChat(e)}}>Chat 2</li>
-            <li key= 'chatid3' id="chat3" className= "" onClick={(e)=> {handleOpenChat(e)}}>Chat 3</li>
+        <div className='chat-wrapper padding'>
+            <div className='chat-left '>
+               <ul className='chat-ul' id="chatList">
+            <a href="/chat"><li key= 'chatid1' id="chat1" className= "" onClick={(e)=> {handleOpenChat(e)}}>Chat 1</li></a>
+            <button name="addChat" className="btn btn-primary addChat-btn" onClick={addChat}>Add Chat</button>
+            {/* <li key= 'chatid2' id="chat2" className= "" onClick={(e)=> {handleOpenChat(e)}}>Chat 2</li>
+            <li key= 'chatid3' id="chat3" className= "" onClick={(e)=> {handleOpenChat(e)}}>Chat 3</li> */}
         </ul>
             </div>
             <div className='chat-right'>
@@ -110,7 +121,7 @@ useEffect(() => {
                         value={message}
                         placeholder='Type a message...'
                         className='chat-inputbx'></input>
-                <button type='submit' onClick={handleSendMessg} className='sendbtn'>Send</button>
+                <button type='submit' onClick={handleSendMessg} className='sendbtn btnbtn-primary'>Send</button>
             </div>
         </div>
             </div>

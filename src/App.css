@@ -21,6 +21,7 @@
   border-radius: 5px;
   margin:50px;
   text-align: center;
+  position:relative;
 }
 
 .chat-ul {
@@ -28,6 +29,9 @@ list-style: none;
 padding: 0;
 margin: 10px 0px;
 width: 100%;
+position:relative;
+height: 300px;
+overflow-y: scroll;
 li{
     font-size: 20px;
     padding: 10px 0px;
@@ -84,6 +88,13 @@ li{
       width: 60px;
       cursor: pointer;
     }
+}
+.addChat-btn{
+  position: absolute;
+    bottom: 0;
+    text-align: center;
+    width: 100%;
+    padding-bottom: 15px;
 }
 .chat-left{
   width: 30%;
