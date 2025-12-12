@@ -1,58 +1,47 @@
 import React, {useState, useEffect,useRef } from 'react'
 import {useDispatch, useSelector} from 'react-redux';
-import { sendMessage as sendChat1, recieveMessage as replyChat1 } from './slices/chat1Slice';
-import { sendMessage as sendChat2, recieveMessage as replyChat2 } from './slices/chat2Slice';
-import { sendMessage as sendChat3, recieveMessage as replyChat3 } from './slices/chat3Slice';
+import { useParams, useNavigate } from 'react-router-dom'
+import { addChat, sendMessage, recieveMessage } from './slices/chatsSlice';
 
 
 const Wbchatapplication = () => {
     const [message, setMessage] = useState('')
     const [openChatTab, setopenChatTab] = useState('chat1')
     const dispatch = useDispatch()
-    const chat1 = useSelector((state)=> state.chat1.messages)
-    const chat2 = useSelector((state)=> state.chat2.messages)
-    const chat3 = useSelector((state)=> state.chat3.messages)
+    const { chatId } = useParams()
+    const navigate = useNavigate()
+    const chatsState = useSelector((state)=> state.chats)
+    const order = chatsState?.order || []
+    const chats = chatsState?.chats || {}
     function updateMessage(e) {
         setMessage(e.target.value)
     }
     function handleSendMessg () {
-        if(message.trim() === '') return ;
-        if(openChatTab == 'chat1'){
-            dispatch(sendChat1(message))
-            setMessage('')
-            setTimeout(() => {dispatch(replyChat1(message))
-            },500)
-        }else if(openChatTab == 'chat2'){
-            dispatch(sendChat2(message))
-            setMessage('')
-            setTimeout(() => {dispatch(replyChat2(message))
-            },500)
-        }else if(openChatTab == 'chat3'){
-            dispatch(sendChat3(message))
-            setMessage('')
-            setTimeout(() => {dispatch(replyChat3(message))
-            },500)
-        }
-        
+        if(message.trim() === '' || !openChatTab) return ;
+        dispatch(sendMessage({ chatId: openChatTab, text: message }))
+        setMessage('')
+        setTimeout(() => { dispatch(recieveMessage({ chatId: openChatTab, text: message })) }, 500)
     }
     function handleOpenChat(e) {
-        console.log('clicked chat:' + e.currentTarget.id)
-        document.querySelectorAll('li').forEach(li => {
-            li.classList.remove('active');
-        });
-        e.currentTarget.classList.add('active');
-        setopenChatTab(e.currentTarget.id)
+        const id = e.currentTarget.id
+        navigate(`/${id}`)
     }
-let openChatWindow = chat1
-if(openChatTab== 'chat1'){
-    openChatWindow = chat1;
-} else if(openChatTab== 'chat2'){
-    openChatWindow = chat2;
+let openChatWindow = []
+if (openChatTab && chats[openChatTab]) {
+    openChatWindow = chats[openChatTab].messages
+}
 
-} else if(openChatTab== 'chat3'){
-    openChatWindow = chat3;
-
-} 
+useEffect(() => {
+    if (chatId) {
+        if (chats[chatId]) {
+            setopenChatTab(chatId)
+        } else if (order.length > 0) {
+            navigate(`/${order[0]}`, { replace: true })
+        }
+    } else if (order.length > 0) {
+        navigate(`/${order[0]}`, { replace: true })
+    }
+}, [chatId, chats, order, navigate])
 
 const apiResponse = (messg) =>{
     return (
@@ -77,13 +66,20 @@ const userchat = (messg) =>{
     )
 }
 
-function addChat () {
-    const list = document.getElementById("chatList");
-    const newItem = document.createElement("li");
-    const itemText = "Chat " + (list.children.length + 1);
-    newItem.textContent = itemText;
-    newItem.addEventListener("click", handleOpenChat);
-    list.appendChild(newItem)
+function handleAddChat () {
+    let maxNumber = 0
+    for (let existingId of order) {
+        const digits = String(existingId).replace(/\D/g, '')
+        const n = digits ? parseInt(digits, 10) : 0
+        if (n > maxNumber) maxNumber = n
+    }
+    const nextNumber = maxNumber + 1
+    const newId = 'chat' + nextNumber
+    const newName = 'Chat ' + nextNumber
+
+
+    dispatch(addChat({ id: newId, name: newName }))
+    navigate(`/${newId}`)
 }
 
 const messagesEndRef = useRef(null); 
@@ -96,11 +92,12 @@ useEffect(() => {
         <div className='chat-wrapper padding'>
             <div className='chat-left '>
                <ul className='chat-ul' id="chatList">
-            <a href="/chat"><li key= 'chatid1' id="chat1" className= "" onClick={(e)=> {handleOpenChat(e)}}>Chat 1</li></a>
-            <button name="addChat" className="btn btn-primary addChat-btn" onClick={addChat}>Add Chat</button>
-            {/* <li key= 'chatid2' id="chat2" className= "" onClick={(e)=> {handleOpenChat(e)}}>Chat 2</li>
-            <li key= 'chatid3' id="chat3" className= "" onClick={(e)=> {handleOpenChat(e)}}>Chat 3</li> */}
-        </ul>
+                {order.map((id) => (
+                    <li key={id} id={id} className={openChatTab === id ? 'active' : ''} onClick={handleOpenChat}>{chats[id].name}</li>
+                ))}
+                
+            </ul>
+            <button name="addChat" className="btn btn-primary addChat-btn" onClick={handleAddChat}>Add Chat</button>
             </div>
             <div className='chat-right'>
             <div className='message-window'>
